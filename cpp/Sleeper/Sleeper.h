@@ -44,6 +44,18 @@ public:
 		}
 	}
 
+	void sleep(long ms) {
+		long durationMs = ms;
+		const auto end = std::chrono::steady_clock::now() + std::chrono::milliseconds(durationMs);
+		while (!done) {
+			std::unique_lock<std::mutex> lock(mutex);
+			std::cv_status status = cv.wait_until(lock, end);
+			if (status == std::cv_status::timeout || done) {
+				break;
+			}
+		}
+	}
+
 	void reset() {
 		iteration = 0;
 	}
