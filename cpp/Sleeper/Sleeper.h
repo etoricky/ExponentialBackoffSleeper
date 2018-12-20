@@ -44,7 +44,7 @@ public:
 		}
 	}
 
-	void sleep(long ms) {
+	void sleep(long ms) const {
 		long durationMs = ms;
 		const auto end = std::chrono::steady_clock::now() + std::chrono::milliseconds(durationMs);
 		while (!done) {
