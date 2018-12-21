@@ -58,6 +58,7 @@ public:
 
 	void reset() {
 		iteration = 0;
+		done = false;
 	}
 
 	void stop() {

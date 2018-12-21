@@ -9,9 +9,9 @@ std::chrono::milliseconds ms() {
 	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 }
 
-int main() {
+int main_sleep() {
 	std::mutex mutex;
-	Sleeper sleeper{ 100, 60000 };
+	Sleeper sleeper{ 100, 6000 };
 	auto start = ms();
 	for (int i = 0; i < 10; ++i) {
 		if (i == 8) {
@@ -40,4 +40,46 @@ int main() {
 	}
 	std::cout << "main exit" << '\n';
 	std::cin.get();
+	return 0;
+}
+
+
+#include "Thread.h"
+class MyThread : public Thread {
+private:
+	Sleeper sleeper{ 200, 60000 };
+public:
+	virtual void run() override {
+		while (!done) {
+			using namespace std::chrono;
+			milliseconds ms = duration_cast<milliseconds>(
+				system_clock::now().time_since_epoch()
+				);
+			std::cout << ms.count() << std::endl;
+			//std::this_thread::sleep_for(std::chrono::milliseconds(200));
+			sleeper.sleep(200);
+		}
+	}
+	virtual void start() {
+		sleeper.reset();
+		Thread::start();
+	}
+	virtual void stop() {
+		sleeper.stop();
+		Thread::stop();
+	}
+};
+
+int main() {
+	MyThread thread;
+	std::cout << "start 1" << std::endl;
+	thread.start();
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::cout << "start 2" << std::endl;
+	thread.start();
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	thread.stop();
+	std::cout << "bye" << std::endl;
+	std::cin.get();
+	return 0;
 }
