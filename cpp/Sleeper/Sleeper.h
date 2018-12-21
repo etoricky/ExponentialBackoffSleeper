@@ -31,7 +31,7 @@ public:
 			return ms;
 		}
 		else {
-			long durationMs = ms * pow(2, iteration);
+			long durationMs = static_cast<long>(ms * powl(2, iteration));
 			return (std::min)(durationMs, maxMs);
 		}
 	}
