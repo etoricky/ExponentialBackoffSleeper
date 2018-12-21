@@ -11,7 +11,7 @@ std::chrono::milliseconds ms() {
 
 int main_sleep() {
 	std::mutex mutex;
-	Sleeper sleeper{ 100, 6000 };
+	Sleeper sleeper{ 6000 };
 	auto start = ms();
 	for (int i = 0; i < 10; ++i) {
 		if (i == 8) {
@@ -25,12 +25,12 @@ int main_sleep() {
 			});
 			thread.detach();
 		}
-		long next = sleeper.next();
+		long next = sleeper.next(100);
 		{
 			std::lock_guard<std::mutex> lock(mutex);
 			std::cout << "sleeping for " << next << "ms" << '\n';
 		}
-		sleeper.sleep(); // 100, 200, 400, 800, 1600, 3200, 6000, 6000, 6000, 6000
+		sleeper.sleep(100); // 100, 200, 400, 800, 1600, 3200, 6000, 6000, 6000, 6000
 
 		auto t = ms() - start;
 		{
@@ -47,14 +47,14 @@ int main_sleep() {
 #include "Thread.h"
 class MyThread : public Thread {
 private:
-	Sleeper sleeper{ 200, 60000 };
+	Sleeper sleeper;// { 6000 }; // or Sleeper sleeper;
 public:
 	virtual void run() override {
 		while (!done) {
 			using namespace std::chrono;
 			milliseconds ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 			std::cout << ms.count() << std::endl;
-			sleeper.sleep(200); // or sleeper.sleep();
+			sleeper.sleep(200); 
 		}
 	}
 	virtual void start() {
