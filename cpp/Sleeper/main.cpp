@@ -52,12 +52,9 @@ public:
 	virtual void run() override {
 		while (!done) {
 			using namespace std::chrono;
-			milliseconds ms = duration_cast<milliseconds>(
-				system_clock::now().time_since_epoch()
-				);
+			milliseconds ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 			std::cout << ms.count() << std::endl;
-			//std::this_thread::sleep_for(std::chrono::milliseconds(200));
-			sleeper.sleep(200);
+			sleeper.sleep(200); // or sleeper.sleep();
 		}
 	}
 	virtual void start() {
@@ -70,16 +67,22 @@ public:
 	}
 };
 
-int main() {
+int main_thread() {
 	MyThread thread;
 	std::cout << "start 1" << std::endl;
 	thread.start();
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::seconds(5));
 	std::cout << "start 2" << std::endl;
 	thread.start();
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::seconds(5));
 	thread.stop();
 	std::cout << "bye" << std::endl;
 	std::cin.get();
+	return 0;
+}
+
+int main() {
+	main_sleep();
+	main_thread();
 	return 0;
 }

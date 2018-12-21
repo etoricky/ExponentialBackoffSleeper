@@ -12,12 +12,15 @@ public:
 		stop();
 	}
 	virtual void run() {}
-	void start() {
-		stop();
+	virtual void start() {
+		done = true;
+		if (thread.joinable()) {
+			thread.join();
+		}
 		done = false;
 		thread = std::thread(&Thread::run, this);
 	}
-	void stop() {
+	virtual void stop() {
 		done = true;
 		if (thread.joinable()) {
 			thread.join();
