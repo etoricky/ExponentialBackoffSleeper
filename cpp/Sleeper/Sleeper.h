@@ -38,7 +38,7 @@ public:
 
 	void sleep(long ms) {
 		long durationMs = next(ms);
-		if (maxMs != 0) {
+		if (maxMs != 0 && durationMs<maxMs) {
 			++iteration;
 		}
 		const auto end = std::chrono::steady_clock::now() + std::chrono::milliseconds(durationMs);
