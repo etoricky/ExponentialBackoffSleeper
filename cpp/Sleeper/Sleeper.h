@@ -4,6 +4,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <algorithm>
+#include <cmath>
 
 class Sleeper {
 
@@ -18,7 +19,7 @@ private:
 
 public:
 
-	Sleeper(long maxMs=0) : maxMs(maxMs) {
+	Sleeper(long maxMs = 0) : maxMs(maxMs) {
 
 	}
 
@@ -31,7 +32,7 @@ public:
 			return ms;
 		}
 		else {
-			long durationMs = static_cast<long>(ms * powl(2, iteration));
+			long durationMs = static_cast<long>(ms * std::pow(2, iteration));
 			return (std::min)(durationMs, maxMs);
 		}
 	}
