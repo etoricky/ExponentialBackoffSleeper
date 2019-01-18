@@ -11,7 +11,7 @@ class Sleeper {
 private:
 
 	const long initialMs = 100;
-	const long maxMs = 0;
+	const long maxMs;
 	long iteration = 0;
 	mutable std::condition_variable cv;
 	mutable std::mutex mutex;
